@@ -1,6 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+void next(int* pi, int N) {
+	*pi += 1;
+	if (*pi == N) *pi -= N;
+}
+
+int pop(int* pi, int* s) {
+	int a = s[*pi];
+	s[*pi] = 0;
+	return a;
+}
+
+void insert(int* pi, int* s, int n) {
+	s[*pi] = n;
+}
+
 int main(void) {
 	int N, lfirst, llast;
 	scanf("%d", &N);
@@ -16,25 +31,20 @@ int main(void) {
 		s[i] = i + 1;
 	}
 
+
 	while (lfirst != llast) {
-		static int stc = 0;
-		if (stc == 0) {
-			s[lfirst++] = 0;
-			if (lfirst == N) lfirst -= N;
-			stc++;
-		}
-		else if (stc == 1) {
-			if (llast+1 == N) {
-				llast -= N-1;
-				s[llast] = s[lfirst];
-				s[lfirst++] = 0;
-			}
-			else {
-				s[++llast] = s[lfirst];
-				s[lfirst++] = 0;
-			}
-			if (lfirst == N) lfirst -= N;
+		static int stc = 1;
+		if (stc) {
+			pop(&lfirst, s);
+			next(&lfirst, N);
 			stc--;
+		}
+		else {
+			int a = pop(&lfirst, s);
+			next(&lfirst, N);
+			next(&llast, N);
+			insert(&llast, s, a);
+			stc++;
 		}
 	}
 	printf("%d\n", s[lfirst]);
