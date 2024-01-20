@@ -2,8 +2,7 @@
 #include <stdlib.h>
 
 void Move(int* idx, const int k, const int len) {
-	*idx += k;
-	if (*idx >= len) *idx %= len;
+	*idx = (*idx + k) % len;
 }
 
 int Pop(int idx, int* ss) {
