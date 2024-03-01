@@ -1,11 +1,11 @@
 #include <stdio.h>
 
-int s[100][100], queue[1000000][2], n, m, day = 1, left, right;
+int s[100][100], queue[10000][2], n, m, day = 1, left, right;
 
 void bfs(int a, int b, int d) {
 	int abs[8] = { a,a,a - 1,a + 1,b - 1,b + 1,b,b };
 	for (int i = 0; i < 4; i++) {
-		int x = abs[i], y = abs[i + 4]; //x, y는 체크해야 하는 좌표
+		int x = abs[i], y = abs[i + 4];
 		if (x < n && x >= 0 && y < m && y >= 0) {
 			if (s[x][y] == -1) {
 				s[x][y] = d;
