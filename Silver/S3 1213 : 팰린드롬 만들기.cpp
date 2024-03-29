@@ -26,9 +26,7 @@ int main() {
 	vector<int> v(26);
 
 	for (auto c : s) v[c - 65]++;
-	for (auto i : v) {
-		if (i % 2) oddcnt++;
-	}
+	for (auto i : v) if (i % 2) oddcnt++;
 
 	if (s.size() % 2 && oddcnt == 1 || s.size() % 2 == 0 && oddcnt == 0) cout << makefal(v);
 	else cout << "I'm Sorry Hansoo";
