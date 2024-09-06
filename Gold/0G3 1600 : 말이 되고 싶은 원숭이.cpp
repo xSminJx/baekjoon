@@ -13,19 +13,21 @@ bool inrange(int a, int b) {
 }
 
 void bfs(int t, matrix& map, vector<matrix>& visit) {
-	int level = qu.front()[0], x = qu.front()[1], y = qu.front()[2];
-	qu.pop();
+	while (!qu.empty()) {
+		int level = qu.front()[0], x = qu.front()[1], y = qu.front()[2];
+		qu.pop();
 
-	for (int i = 0; i < 12; i++) {
-		int dxx = x + dx[i], dyy = y + dy[i];
-		if (inrange(x, y) && map[dxx][dyy] == 0) {
-			if (i < 4 && visit[level][dxx][dyy] == 0) {
-				qu.push({ level,dxx,dyy });
-				visit[level][dxx][dyy] = t + 1;
-			}
-			else if (i >= 4 && visit[level + 1][dxx][dyy] > t + 1) {
-				qu.push({ level + 1,dxx,dyy });
-				visit[level + 1][dxx][dyy] = t + 1;
+		for (int i = 0; i < 12; i++) {
+			int dxx = x + dx[i], dyy = y + dy[i];
+			if (inrange(dxx, dyy) && map[dxx][dyy] == 0) {
+				if (i < 4 && visit[level][dxx][dyy] == 0) {
+					qu.push({ level,dxx,dyy });
+					visit[level][dxx][dyy] = t + 1;
+				}
+				else if (i >= 4 && visit[level + 1][dxx][dyy] > t + 1) {
+					qu.push({ level + 1,dxx,dyy });
+					visit[level + 1][dxx][dyy] = t + 1;
+				}
 			}
 		}
 	}
@@ -45,8 +47,10 @@ int main() {
 	qu.push({ 0,0,0 });
 	bfs(1, map, visit);
 
-	int mn = 4000;
-	for (auto i : visit) mn = min(mn, i[h - 1][w - 1]);
+	int mn = 40000;
+	for (auto i : visit) {
+		if (i[h - 1][w - 1] != 0) mn = min(mn, i[h - 1][w - 1]);
+	}
 	cout << mn;
 	return 0;
 }
