@@ -12,9 +12,10 @@ bool inrange(int a, int b) {
 	return 0 <= a && a < h && 0 <= b && b < w;
 }
 
-void bfs(int t, matrix& map, vector<matrix>& visit) {
+void bfs(matrix& map, vector<matrix>& visit) {
 	while (!qu.empty()) {
 		int level = qu.front()[0], x = qu.front()[1], y = qu.front()[2];
+		int t = visit[level][x][y];
 		qu.pop();
 
 		for (int i = 0; i < 12; i++) {
@@ -24,8 +25,8 @@ void bfs(int t, matrix& map, vector<matrix>& visit) {
 					qu.push({ level,dxx,dyy });
 					visit[level][dxx][dyy] = t + 1;
 				}
-				else if (i >= 4 && visit[level + 1][dxx][dyy] > t + 1) {
-					qu.push({ level + 1,dxx,dyy });
+				else if (i >= 4 && level < k && (visit[level + 1][dxx][dyy] == 0 || visit[level + 1][dxx][dyy] > t + 1)) {
+					qu.push({ level + 1,dxx,dyy }); // 원숭이를 윗층에 올림
 					visit[level + 1][dxx][dyy] = t + 1;
 				}
 			}
@@ -43,14 +44,15 @@ int main() {
 		for (int j = 0; j < w; j++) cin >> map[i][j];
 	}
 
-	visit[0][0][0] = 1;
+	visit[0][0][0] = 1; // 원숭이가 점프 시 윗층으로 올려서 점프한 결과가 걸어가는 경로를 막지않게 한다.
 	qu.push({ 0,0,0 });
-	bfs(1, map, visit);
+	bfs(map, visit);
 
 	int mn = 40000;
 	for (auto i : visit) {
 		if (i[h - 1][w - 1] != 0) mn = min(mn, i[h - 1][w - 1]);
 	}
-	cout << mn;
+	if (mn == 40000) cout << -1;
+	else cout << mn - 1;
 	return 0;
 }
